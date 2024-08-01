@@ -96,7 +96,7 @@ mkdir fastqc_trim
 screen
 
 
-fastqc *.fastq.gz -o /Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads3/fastqc_trim/
+fastqc *.fastq.gz -o cd Trimmed_reads3/fastqc_trim/
 
 # just PE
 
@@ -130,3 +130,31 @@ scp cloudsigma@31.171.240.211:/home/cloudsigma/01_Read_Cleaning/Output_R1_paired
 
 
 ######### test on one read ######
+
+
+
+# TEST works on single read
+java -jar /usr/local/bin/trimmomatic.jar PE -threads 2 -trimlog /Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimtest/trim_next_log.txt /Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/rawreads/AK01_R1.fastq.gz /Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/rawreads/AK01_R2.fastq.gz ILLUMINACLIP:/Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimtest/seqtoremovenext.txt:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:30 MINLEN:30 
+
+java -jar /usr/local/bin/trimmomatic.jar PE -threads 2 -trimlog /Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimtest/trim_next_log.txt AK01_R1.fastq.gz AK01_R2.fastq.gz ILLUMINACLIP:/Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimtest/seqtoremovenext.txt:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:30 MINLEN:30 
+
+
+
+screen
+
+cutadapt -a GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG -o AK01_R1_nextR2.fastq.gz AK01_R1.fastq.gz
+
+
+
+cutadapt -a GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG AK01_R1.fastq.gz > AK01_R1_nextR2.fastq.gz 2> AK01_R1_nextR2_report.txt
+screen -r 413209
+
+
+cutadapt -a TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG AK01_R1.fastq.gz > AK01_R1_nextR1.fastq.gz 2> AK01_R1_nextR1_report.txt
+screen -r 431411
+
+cutadapt -a TCGTCGGCAGCGTC AK01_R1.fastq.gz > AK01_R1_i5.fastq.gz 2> AK01_R1_i5_report.txt
+screen -r 434507
+
+cutadapt -a GTCTCGTGGGCTCGG AK01_R1.fastq.gz > AK01_R1_i7.fastq.gz 2> AK01_R1_i7_report.txt
+screen -r 436837
