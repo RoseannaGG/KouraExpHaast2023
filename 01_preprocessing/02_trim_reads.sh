@@ -140,6 +140,10 @@ java -jar /usr/local/bin/trimmomatic.jar PE -threads 2 -trimlog /Volumes/archive
 
 
 
+## cutadapt
+
+# https://cutadapt.readthedocs.io/en/stable/guide.html
+
 screen
 
 cutadapt -a GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG -o AK01_R1_nextR2.fastq.gz AK01_R1.fastq.gz
