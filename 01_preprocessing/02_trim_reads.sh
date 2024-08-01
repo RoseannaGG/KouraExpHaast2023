@@ -124,3 +124,9 @@ multiqc .
 
 ## download html files
 scp cloudsigma@31.171.240.211:/home/cloudsigma/01_Read_Cleaning/Output_R1_paired_fastqc.html cloudsigma@31.171.240.211:/home/cloudsigma/01_Read_Cleaning/Output_R2_paired_fastqc.html /drives/c/Users/gamro07p/Documents/Transcriptomics/Tutorial_08_03_23/data/
+
+
+
+
+
+######### test on one read ######
