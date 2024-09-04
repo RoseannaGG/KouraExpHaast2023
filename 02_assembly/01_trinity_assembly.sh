@@ -3,7 +3,7 @@
 ############################
 
 
-cd /Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads_adap/
+cd /Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads3/
 
 
 /Volumes/archive/kennylab/LocalProgrammes/trinityrnaseq-v2.14.0/Trinity
@@ -25,7 +25,7 @@ screen
 Crtl +A+D #to exit
 
 #to reattach
-screen -r 197038
+screen -r 231869
 
 "
 
