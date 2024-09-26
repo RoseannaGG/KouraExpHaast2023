@@ -2,26 +2,28 @@
 ### 06_alignment ############ should only take 30min or so
 ############################
 
-cd ~/Trimmed_reads_adap
+cd /Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads/
 mkdir R1_trimmed_PE R2_trimmed_PE
 
 screen
 cp *R1_PE.fastq.gz R1_trimmed_PE/
 
-screen -r 
+screen -r 19586
 
 screen
 cp *R2_PE.fastq.gz R2_trimmed_PE/
-screen -r 
+screen -r 20519
 
+cd /Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads/trinity/EviGene/star_index/
 
+mkdir alignment
 
-
+## used star index rather than bowtie... took about 4 hours
 ## loop
 screen
-GENOME_DIR="/Volumes/archive/kennylab/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads_adap/trinity/Evigene/bowtie_index/genome/"
+GENOME_DIR="/Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads/trinity/EviGene/star_index/"
 THREADS=16
-OUTPUT_DIR="/Volumes/archive/kennylab/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads_adap/trinity/Evigene/bowtie_index/alignment/"  
+OUTPUT_DIR="/Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads/trinity/EviGene/star_index/alignment/"
 
 
 # List of sample names
@@ -30,8 +32,8 @@ sample_names=("AK01" "AK02" "AK03" "AK04" "AK05" "AK06" "AK07" "AK08" "AK09" "AK
 # Loop through the sample names
 for sample_name in "${sample_names[@]}"; do
     # Construct the paths to the forward and reverse read files for the sample
-    read1="/Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads_adap/R1_trimmed_PE/${sample_name}_R1_PE.fastq.gz"
-    read2="/Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads_adap/R2_trimmed_PE/${sample_name}_R2_PE.fastq.gz"
+    read1="/Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads/R1_trimmed_PE/${sample_name}_R1_PE.fastq.gz"
+    read2="/Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads/R2_trimmed_PE/${sample_name}_R2_PE.fastq.gz"
 
     # Run STAR for alignment
     STAR \
@@ -39,7 +41,8 @@ for sample_name in "${sample_names[@]}"; do
         --runThreadN "$THREADS" \
         --readFilesIn "$read1" "$read2" \
         --readFilesCommand zcat \
-        --outFileNamePrefix "$OUTPUT_DIR/${sample_name}_"
+        --outFileNamePrefix "$OUTPUT_DIR/${sample_name}_" \
+        --quantMode TranscriptomeSAM
 
     echo "Alignment for $sample_name is complete."
 done
@@ -47,9 +50,19 @@ done
 echo "All alignments are finished."
 
 
-screen -r 
+screen -r 252960
 
+
+## first time ran with a genome that had been indexed using bowtie and it didn't work... got this error
 "
+Sep 25 14:19:28 ...... FATAL ERROR, exiting
+Alignment for HK17 is complete.
+Sep 25 14:19:28 ..... started STAR run
+Sep 25 14:19:28 ..... loading genome
+
+EXITING because of FATAL ERROR: could not open genome file /Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads/trinity/EviGene/star_index//genomeParameters.txt
+SOLUTION: check that the path to genome files, specified in --genomeDir is correct and the files are present, and have user read permsissions
+
 "
 
 
@@ -57,7 +70,7 @@ screen -r
 
 
 ##### cinvert sam to bam
-
+# test
 for file in *.sam; do
 
     samtools view -S -b $file > "`basename $file .sam`.bam"
@@ -69,8 +82,8 @@ mkdir bamfiles
 
 screen
 
-input_dir="/Volumes/archive/kennylab/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads_adap/trinity/Evigene/bowtie_index/alignment/"
-output_dir="/Volumes/archive/kennylab/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads_adap/trinity/Evigene/bowtie_index/alignment/bamfiles/"
+input_dir="/Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads/trinity/EviGene/star_index/alignment/"
+output_dir="/Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads/trinity/EviGene/star_index/alignment/bamfiles/"
 
 # Ensure the output directory exists
 mkdir -p "$output_dir"
@@ -90,14 +103,14 @@ for sam_file in "${input_dir}"/*.sam; do
 done
 
 
-screen -r 
+screen -r 118001
 
 ## sort bam for snp calling
 
 screen
 
-input_dir="/Volumes/archive/kennylab/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads_adap/trinity/Evigene/bowtie_index/alignment/bamfiles/"
-output_dir="/Volumes/archive/kennylab/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads_adap/trinity/Evigene/bowtie_index/alignment/bamfiles/sorted_bamfiles/"
+input_dir="/Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads/trinity/EviGene/star_index/alignment/bamfiles/"
+output_dir="/Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads/trinity/EviGene/star_index/alignment/bamfiles/sorted_bamfiles/"
 
 # Ensure the output directory exists
 mkdir -p "$output_dir"
@@ -123,7 +136,7 @@ screen -r
 
 ## index genome again
 
-cd /Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads_adap/trinity/Evigene/annotation_evigene
+cd /Volumes/archive/kennylab/Roseanna/KouraHaastExperiment2023/Trimmed_reads/trinity/EviGene/annotation_evigene
 
 screen
 
